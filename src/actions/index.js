@@ -1,15 +1,35 @@
-import types from './types';
+import types from "./types";
 
-const increment = () => ({
-  type: types.INCREMENT,
+export const fetchUsersData = () => ({
+  type: types.FETCH_USERS_DATA,
 });
 
-export const decrement = () => ({
-  type: types.DECREMENT,
+export const fetchUsersDataSuccess = (data) => ({
+  type: types.FETCH_USERS_DATA_SUCCESS,
+  data,
 });
 
-export const incrementAsync = error => ({
-  type: types.INCREMENT_ASYNC,
+export const deleteUser = (data) => ({
+  type: types.DELETE_USER,
+  data,
 });
 
-export default increment;
+export const deleteUserSuccess = (data) => ({
+  type: types.DELETE_USER_SUCCESS,
+  data,
+});
+
+export const updateUser = (data) => ({
+  type: types.UPDATE_USER,
+  data,
+});
+
+export const updateUserSuccess = (data) => ({
+  type: types.UPDATE_USER_SUCCESS,
+  data,
+});
+
+export const setEditRow = (data) => ({
+  type: types.SET_EDIT_ROW,
+  data,
+});

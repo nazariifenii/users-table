@@ -1,17 +1,51 @@
-import { all, call, delay, put, takeEvery } from 'redux-saga/effects'
+import { all, call, put, takeEvery } from "redux-saga/effects";
+import {
+  fetchUsersDataSuccess,
+  deleteUserSuccess,
+  updateUserSuccess,
+  setEditRow,
+} from "../actions";
+import Types from "../actions/types";
+import API from "../api/users";
 
-export function* incrementAsync() {
-  yield delay(1000)
-  yield put({type: 'INCREMENT'})
+export function* fetchUsersData() {
+  try {
+    const response = yield call(API.getAllUsers);
+    yield put(fetchUsersDataSuccess(response));
+  } catch (error) {
+    console.log("FETCH_USERS_DATA_ERROR", error);
+  }
 }
 
-export function* watchIncrementAsync() {
-  yield takeEvery('INCREMENT_ASYNC', incrementAsync)
+export function* deleteUser(action) {
+  try {
+    const id = action.data.id;
+    const response = yield call(API.deleteUser, id);
+    if (response.id === id) {
+      // && resp === success
+      yield put(deleteUserSuccess({ id: response.id }));
+    }
+  } catch (error) {
+    console.log("DELETE_USER_ERROR", error);
+  }
 }
 
-// single entry point to start all Sagas at once
+export function* updateUser(action) {
+  try {
+    const response = yield call(API.updateUser, action.data);
+    yield put(updateUserSuccess(response));
+    yield put(setEditRow({}));
+  } catch (error) {
+    console.log("UPDATE_USER_ERROR", error);
+  }
+}
+
+export function* watchUsers() {
+  yield takeEvery(Types.FETCH_USERS_DATA, fetchUsersData);
+  yield takeEvery(Types.DELETE_USER, deleteUser);
+  yield takeEvery(Types.UPDATE_USER, updateUser);
+}
+
 export default function* rootSaga() {
-  yield all([
-    call(watchIncrementAsync),
-  ])
+  yield all([call(watchUsers)]);
 }
