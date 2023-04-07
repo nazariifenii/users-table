@@ -3,7 +3,7 @@ import Types from "../actions/types";
 
 const initialState = {
   users: [],
-  editRow: {},
+  editUserRow: {},
   createUserRow: {},
 };
 
@@ -31,7 +31,7 @@ const users = (state = initialState, action) => {
     case Types.SET_EDIT_ROW:
       return {
         ...state,
-        editRow: action.data,
+        editUserRow: action.data,
       };
     case Types.SET_CREATE_USER_ROW:
       return {

@@ -5,7 +5,7 @@ import {
   fetchUsersData,
   deleteUser,
   updateUser,
-  setEditRow,
+  seteditUserRow,
   createUser,
   setCreateUserRow,
 } from "./actions/index";
@@ -13,9 +13,9 @@ import { clearObjectValues } from "./utils";
 
 const UsersPage = () => {
   const dispatch = useDispatch();
-  const [userData, editRow, createUserRow] = useSelector((state) => [
+  const [userData, editUserRow, createUserRow] = useSelector((state) => [
     state.users.users,
-    state.users.editRow,
+    state.users.editUserRow,
     state.users.createUserRow,
   ]);
 
@@ -29,16 +29,16 @@ const UsersPage = () => {
 
   const onChangeInput = (e) => {
     const { name: fieldName, value } = e.target;
-    dispatch(setEditRow({ ...editRow, [fieldName]: value }));
+    dispatch(seteditUserRow({ ...editUserRow, [fieldName]: value }));
   };
 
   const handleEditUser = (id) => {
-    dispatch(setEditRow(userData.find((user) => user.id === id)));
+    dispatch(seteditUserRow(userData.find((user) => user.id === id)));
   };
 
   const handleSaveUserData = (id) => {
-    if (id === editRow?.id) {
-      dispatch(updateUser(editRow));
+    if (id === editUserRow?.id) {
+      dispatch(updateUser(editUserRow));
     }
   };
 
@@ -56,7 +56,7 @@ const UsersPage = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <table>
         <thead>
           <tr>
@@ -68,68 +68,71 @@ const UsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {userData.length &&
-            userData.map(({ id, name, age, about }) => {
-              const isRowEditable = editRow?.id === id;
-              return (
-                <tr key={id}>
-                  <td>{id}</td>
-                  <td>
-                    {isRowEditable ? (
-                      <input
-                        name="name"
-                        value={editRow?.name}
-                        type="text"
-                        onChange={(e) => onChangeInput(e, id)}
-                        placeholder="Type Name"
-                      />
-                    ) : (
-                      name
-                    )}
-                  </td>
-                  <td>
-                    {isRowEditable ? (
-                      <input
-                        name="age"
-                        value={editRow?.age}
-                        type="number"
-                        onChange={(e) => onChangeInput(e, id)}
-                        placeholder="Type age"
-                      />
-                    ) : (
-                      age
-                    )}
-                  </td>
-                  <td>
-                    {isRowEditable ? (
-                      <input
-                        name="about"
-                        value={editRow?.about}
-                        type="text"
-                        onChange={(e) => onChangeInput(e, id)}
-                        placeholder="Type info"
-                      />
-                    ) : (
-                      about
-                    )}
-                  </td>
-                  <td>
-                    {isRowEditable ? (
-                      <button onClick={() => handleSaveUserData(id)}>
-                        Save
-                      </button>
-                    ) : (
-                      <>
-                        <button onClick={() => handleDeleteUser(id)}>
-                          Delete
+          {userData.length === 0
+            ? null
+            : userData.map(({ id, name, age, about }) => {
+                const isRowEditable = editUserRow?.id === id;
+                return (
+                  <tr key={id}>
+                    <td>{id}</td>
+                    <td>
+                      {isRowEditable ? (
+                        <input
+                          name="name"
+                          value={editUserRow?.name}
+                          type="text"
+                          onChange={(e) => onChangeInput(e, id)}
+                          placeholder="Type Name"
+                        />
+                      ) : (
+                        <span>{name}</span>
+                      )}
+                    </td>
+                    <td>
+                      {isRowEditable ? (
+                        <input
+                          name="age"
+                          value={editUserRow?.age}
+                          type="number"
+                          onChange={(e) => onChangeInput(e, id)}
+                          placeholder="Type age"
+                        />
+                      ) : (
+                        <span>{age}</span>
+                      )}
+                    </td>
+                    <td>
+                      {isRowEditable ? (
+                        <input
+                          name="about"
+                          value={editUserRow?.about}
+                          type="text"
+                          onChange={(e) => onChangeInput(e, id)}
+                          placeholder="Type info"
+                        />
+                      ) : (
+                        <span>{about}</span>
+                      )}
+                    </td>
+                    <td>
+                      {isRowEditable ? (
+                        <button onClick={() => handleSaveUserData(id)}>
+                          Save
                         </button>
-                        <button onClick={() => handleEditUser(id)}>Edit</button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+                      ) : (
+                        <>
+                          <button onClick={() => handleDeleteUser(id)}>
+                            Delete
+                          </button>
+                          <button onClick={() => handleEditUser(id)}>
+                            Edit
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
           <tr key={"create-new-user"}>
             <td>{null}</td>
             <td>

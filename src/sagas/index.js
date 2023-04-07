@@ -3,7 +3,7 @@ import {
   fetchUsersDataSuccess,
   deleteUserSuccess,
   updateUserSuccess,
-  setEditRow,
+  seteditUserRow,
   createUserSuccess,
   setCreateUserRow,
 } from "../actions";
@@ -37,7 +37,7 @@ export function* updateUser(action) {
   try {
     const response = yield call(API.updateUser, action.data);
     yield put(updateUserSuccess(response));
-    yield put(setEditRow({}));
+    yield put(seteditUserRow({}));
   } catch (error) {
     console.log("UPDATE_USER_ERROR", error);
   }

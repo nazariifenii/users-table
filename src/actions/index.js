@@ -41,7 +41,7 @@ export const createUserSuccess = (data) => ({
   data,
 });
 
-export const setEditRow = (data) => ({
+export const seteditUserRow = (data) => ({
   type: types.SET_EDIT_ROW,
   data,
 });
