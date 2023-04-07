@@ -1,12 +1,5 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
-import {
-  fetchUsersDataSuccess,
-  deleteUserSuccess,
-  updateUserSuccess,
-  seteditUserRow,
-  createUserSuccess,
-  setCreateUserRow,
-} from "../actions";
+import Actions from "../actions";
 import Types from "../actions/types";
 import API from "../api/users";
 import { clearObjectValues } from "../utils";
@@ -14,7 +7,7 @@ import { clearObjectValues } from "../utils";
 export function* fetchUsersData() {
   try {
     const response = yield call(API.getAllUsers);
-    yield put(fetchUsersDataSuccess(response));
+    yield put(Actions.fetchUsersDataSuccess(response));
   } catch (error) {
     console.log("FETCH_USERS_DATA_ERROR", error);
   }
@@ -26,7 +19,7 @@ export function* deleteUser(action) {
     const response = yield call(API.deleteUser, id);
     if (response.id === id) {
       // && resp === success
-      yield put(deleteUserSuccess({ id: response.id }));
+      yield put(Actions.deleteUserSuccess({ id: response.id }));
     }
   } catch (error) {
     console.log("DELETE_USER_ERROR", error);
@@ -36,8 +29,8 @@ export function* deleteUser(action) {
 export function* updateUser(action) {
   try {
     const response = yield call(API.updateUser, action.data);
-    yield put(updateUserSuccess(response));
-    yield put(seteditUserRow({}));
+    yield put(Actions.updateUserSuccess(response));
+    yield put(Actions.setEditUserRow({}));
   } catch (error) {
     console.log("UPDATE_USER_ERROR", error);
   }
@@ -46,9 +39,9 @@ export function* updateUser(action) {
 export function* createUser(action) {
   try {
     const response = yield call(API.createUser, action.data);
-    yield put(createUserSuccess(response));
+    yield put(Actions.createUserSuccess(response));
     const clearedValues = clearObjectValues(response);
-    yield put(setCreateUserRow(clearedValues));
+    yield put(Actions.setCreateUserRow(clearedValues));
   } catch (error) {
     console.log("UPDATE_USER_ERROR", error);
   }
