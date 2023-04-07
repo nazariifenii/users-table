@@ -6,13 +6,17 @@ import {
   deleteUser,
   updateUser,
   setEditRow,
+  createUser,
+  setCreateUserRow,
 } from "./actions/index";
+import { clearObjectValues } from "./utils";
 
 const UsersPage = () => {
   const dispatch = useDispatch();
-  const [userData, editRow] = useSelector((state) => [
+  const [userData, editRow, createUserRow] = useSelector((state) => [
     state.users.users,
     state.users.editRow,
+    state.users.createUserRow,
   ]);
 
   useEffect(() => {
@@ -32,10 +36,23 @@ const UsersPage = () => {
     dispatch(setEditRow(userData.find((user) => user.id === id)));
   };
 
-  const handleSaveUserData = (e, id) => {
+  const handleSaveUserData = (id) => {
     if (id === editRow?.id) {
       dispatch(updateUser(editRow));
     }
+  };
+
+  const handleCreateUser = () => {
+    dispatch(createUser(createUserRow));
+  };
+
+  const onChangeCreateInput = (e) => {
+    const { name: fieldName, value } = e.target;
+    dispatch(setCreateUserRow({ ...createUserRow, [fieldName]: value }));
+  };
+
+  const handleClearCreateUserRow = () => {
+    dispatch(setCreateUserRow(clearObjectValues(createUserRow)));
   };
 
   return (
@@ -98,7 +115,7 @@ const UsersPage = () => {
                   </td>
                   <td>
                     {isRowEditable ? (
-                      <button onClick={(e) => handleSaveUserData(e, id)}>
+                      <button onClick={() => handleSaveUserData(id)}>
                         Save
                       </button>
                     ) : (
@@ -113,6 +130,40 @@ const UsersPage = () => {
                 </tr>
               );
             })}
+          <tr key={"create-new-user"}>
+            <td>{null}</td>
+            <td>
+              <input
+                name="name"
+                value={createUserRow?.name}
+                type="text"
+                onChange={onChangeCreateInput}
+                placeholder="Type Name"
+              />
+            </td>
+            <td>
+              <input
+                name="age"
+                value={createUserRow?.age}
+                type="number"
+                onChange={onChangeCreateInput}
+                placeholder="Type age"
+              />
+            </td>
+            <td>
+              <input
+                name="about"
+                value={createUserRow?.about}
+                type="text"
+                onChange={onChangeCreateInput}
+                placeholder="Type info"
+              />
+            </td>
+            <td>
+              <button onClick={handleCreateUser}>Add New</button>
+              <button onClick={handleClearCreateUserRow}>Clear</button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

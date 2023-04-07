@@ -4,9 +4,12 @@ import {
   deleteUserSuccess,
   updateUserSuccess,
   setEditRow,
+  createUserSuccess,
+  setCreateUserRow,
 } from "../actions";
 import Types from "../actions/types";
 import API from "../api/users";
+import { clearObjectValues } from "../utils";
 
 export function* fetchUsersData() {
   try {
@@ -40,10 +43,22 @@ export function* updateUser(action) {
   }
 }
 
+export function* createUser(action) {
+  try {
+    const response = yield call(API.createUser, action.data);
+    yield put(createUserSuccess(response));
+    const clearedValues = clearObjectValues(response);
+    yield put(setCreateUserRow(clearedValues));
+  } catch (error) {
+    console.log("UPDATE_USER_ERROR", error);
+  }
+}
+
 export function* watchUsers() {
   yield takeEvery(Types.FETCH_USERS_DATA, fetchUsersData);
   yield takeEvery(Types.DELETE_USER, deleteUser);
   yield takeEvery(Types.UPDATE_USER, updateUser);
+  yield takeEvery(Types.CREATE_USER, createUser);
 }
 
 export default function* rootSaga() {

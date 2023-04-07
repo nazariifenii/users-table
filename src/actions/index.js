@@ -29,7 +29,24 @@ export const updateUserSuccess = (data) => ({
   data,
 });
 
+export const createUser = (data) => {
+    return {
+    type: types.CREATE_USER,
+    data,
+  };
+};
+
+export const createUserSuccess = (data) => ({
+  type: types.CREATE_USER_SUCCESS,
+  data,
+});
+
 export const setEditRow = (data) => ({
   type: types.SET_EDIT_ROW,
+  data,
+});
+
+export const setCreateUserRow = (data) => ({
+  type: types.SET_CREATE_USER_ROW,
   data,
 });

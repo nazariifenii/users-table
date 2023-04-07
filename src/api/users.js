@@ -19,8 +19,17 @@ const updateUser = (userData) => {
     .then((response) => response.data);
 };
 
-export default {
+const createUser = (userData) => {
+  return axios
+    .post("https://642fd97cb289b1dec4bb7234.mockapi.io/users", userData)
+    .then((response) => response.data);
+};
+
+const API = {
   getAllUsers,
   deleteUser,
   updateUser,
+  createUser,
 };
+
+export default API;

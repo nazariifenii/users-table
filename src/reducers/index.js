@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 import Types from "../actions/types";
 
-const initialState = { users: [], editRow: {} };
+const initialState = {
+  users: [],
+  editRow: {},
+  createUserRow: {},
+};
 
 const users = (state = initialState, action) => {
   switch (action.type) {
@@ -19,10 +23,20 @@ const users = (state = initialState, action) => {
           user.id === action.data.id ? action.data : user
         ),
       };
+    case Types.CREATE_USER_SUCCESS:
+      return {
+        ...state,
+        users: [...state.users, action.data],
+      };
     case Types.SET_EDIT_ROW:
       return {
         ...state,
         editRow: action.data,
+      };
+    case Types.SET_CREATE_USER_ROW:
+      return {
+        ...state,
+        createUserRow: action.data,
       };
     default:
       return state;
