@@ -6,6 +6,7 @@ export const Container = styled.div`
   padding: 0 10px;
   margin: 0 auto;
   margin-top: 70px;
+  margin-bottom: 70px;
 `;
 
 export const Table = styled.table`
@@ -16,9 +17,10 @@ export const Table = styled.table`
 export const TableHeaderCell = styled.th`
   font-size: 18px;
   padding: 12px;
+  color: rgb(64, 81, 59);
   border: 1px solid #eeeeee;
-  text-align: left;
-  background-color: rgba(217, 221, 146, 0.2);
+  text-align: center;
+  background-color: rgb(157, 192, 139);
 `;
 
 export const TableDataCell = styled.td`
@@ -27,7 +29,6 @@ export const TableDataCell = styled.td`
 `;
 
 export const TableDataActionsCell = styled(TableDataCell)`
-  border: 1px solid #eeeeee;
   text-align: center;
 `;
 
@@ -38,10 +39,6 @@ export const TableCellInput = styled.input`
   width: 80%;
   padding: 12px 12px;
   font-family: "Poppins", sans-serif;
-
-  &:hover {
-    background-color: #fffaf3;
-  }
 
   &:focus {
     outline: 1px solid #ccc;
@@ -54,8 +51,8 @@ export const Button = styled.button`
   border: 1px solid #d5d9d9;
   border-radius: 8px;
   box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
+  font-family: "Poppins", sans-serif;
   box-sizing: border-box;
-  color: #0f1111;
   cursor: pointer;
   display: inline-block;
   font-size: 11px;
@@ -71,12 +68,20 @@ export const Button = styled.button`
   width: 80px;
 
   &:hover {
-    background-color: #f7fafa;
+    background-color: ${(props) => {
+      switch (props.type) {
+        case "create":
+          return "rgba(96, 153, 102, 0.4)";
+        case "error":
+          return "rgba(250, 112, 112, 0.4)";
+        default:
+          return "#f7fafa";
+      }
+    }};
   }
 
   &:focus {
-    border-color: #008296;
-    box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
+    box-shadow: rgb(237, 241, 214) 0 2px 5px 0;
     outline: 0;
   }
 `;
@@ -91,4 +96,13 @@ export const TableCellText = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+export const TableRow = styled.tr`
+  background-color: ${(props) =>
+    props.editable ? "rgba(237, 241, 214, 0.2)" : "transparent"};
+`;
+
+export const TableEditRow = styled.tr`
+  background-color: rgba(237, 241, 214, 0.2);
 `;

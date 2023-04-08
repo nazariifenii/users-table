@@ -11,6 +11,8 @@ import {
   TableCellText,
   TableDataActionsCell,
   ButtonLeft,
+  TableRow,
+  TableEditRow,
 } from "./App.styled";
 import { clearObjectValues } from "./utils";
 
@@ -60,17 +62,21 @@ const UsersPage = () => {
     dispatch(Actions.setCreateUserRow(clearObjectValues(createUserRow)));
   };
 
+  const handleCancelEdit = () => {
+    dispatch(Actions.setEditUserRow({}));
+  };
+
   return (
     <Container>
       <Table>
         <thead>
-          <tr>
+          <TableRow>
             <TableHeaderCell>ID</TableHeaderCell>
             <TableHeaderCell>Name</TableHeaderCell>
             <TableHeaderCell>Age</TableHeaderCell>
             <TableHeaderCell>About</TableHeaderCell>
             <TableHeaderCell>Action</TableHeaderCell>
-          </tr>
+          </TableRow>
         </thead>
         <tbody>
           {userData.length === 0
@@ -78,7 +84,7 @@ const UsersPage = () => {
             : userData.map(({ id, name, age, about }) => {
                 const isRowEditable = editUserRow?.id === id;
                 return (
-                  <tr key={id}>
+                  <TableRow editable={isRowEditable} key={id}>
                     <TableDataCell>
                       <TableCellText>{id}</TableCellText>
                     </TableDataCell>
@@ -125,24 +131,27 @@ const UsersPage = () => {
                     </TableDataCell>
                     <TableDataActionsCell>
                       {isRowEditable ? (
-                        <Button onClick={() => handleSaveUserData(id)}>
-                          Save
-                        </Button>
+                        <>
+                          <ButtonLeft type="create" onClick={() => handleSaveUserData(id)}>
+                            Save
+                          </ButtonLeft>
+                          <Button onClick={handleCancelEdit}>Cancel</Button>
+                        </>
                       ) : (
                         <>
-                          <ButtonLeft onClick={() => handleDeleteUser(id)}>
-                            Delete
-                          </ButtonLeft>
-                          <Button onClick={() => handleEditUser(id)}>
+                          <ButtonLeft onClick={() => handleEditUser(id)}>
                             Edit
+                          </ButtonLeft>
+                          <Button type="error" onClick={() => handleDeleteUser(id)}>
+                            Delete
                           </Button>
                         </>
                       )}
                     </TableDataActionsCell>
-                  </tr>
+                  </TableRow>
                 );
               })}
-          <tr key={"create-new-user"}>
+          <TableEditRow key={"create-new-user"}>
             <TableDataCell>{null}</TableDataCell>
             <TableDataCell>
               <TableCellInput
@@ -174,10 +183,10 @@ const UsersPage = () => {
               />
             </TableDataCell>
             <TableDataActionsCell>
-              <ButtonLeft onClick={handleCreateUser}>Add New</ButtonLeft>
+              <ButtonLeft type="create" onClick={handleCreateUser}>Add New</ButtonLeft>
               <Button onClick={handleClearCreateUserRow}>Clear</Button>
             </TableDataActionsCell>
-          </tr>
+          </TableEditRow>
         </tbody>
       </Table>
     </Container>
