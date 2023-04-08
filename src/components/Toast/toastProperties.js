@@ -9,8 +9,8 @@ export const TOAST_PROPERTIES = {
     backgroundColor: "#5cb85c",
     icon: checkIcon,
   },
-  danger: {
-    title: "Danger",
+  error: {
+    title: "Error",
     backgroundColor: "#d9534f",
     icon: errorIcon,
   },

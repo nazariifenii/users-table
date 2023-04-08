@@ -6,7 +6,7 @@ const initialState = {
   usersByIds: [],
   usersIds: [],
   editUserRow: {},
-  createUserRow: {},
+  createUserRow: { name: "", age: "", about: "" },
   notificationList: [],
 };
 

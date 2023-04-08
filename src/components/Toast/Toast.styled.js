@@ -45,7 +45,7 @@ export const Notification = styled.div`
 
 export const CloseButton = styled.div`
   position: relative;
-  right: -0.3em;
+  right: -0.13em;
   top: -0.3em;
   float: right;
   font-weight: 700;

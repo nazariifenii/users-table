@@ -13,7 +13,7 @@ export function* fetchUsersData() {
   } catch (error) {
     yield put(
       Actions.addNotification(
-        genToastNotification("danger", "Error fetching all users")
+        genToastNotification("error", "Error fetching all users")
       )
     );
   }
@@ -21,21 +21,17 @@ export function* fetchUsersData() {
 
 export function* deleteUser(action) {
   try {
-    const id = action.data.id;
-    const response = yield call(API.deleteUser, id);
-    if (response.id === id) {
-      // && resp === success
-      yield put(Actions.deleteUserSuccess({ id: response.id }));
-      yield put(
-        Actions.addNotification(
-          genToastNotification("success", "User deleted successfully")
-        )
-      );
-    }
+    const response = yield call(API.deleteUser, action.data.id);
+    yield put(Actions.deleteUserSuccess({ id: response.id }));
+    yield put(
+      Actions.addNotification(
+        genToastNotification("success", "User deleted successfully")
+      )
+    );
   } catch (error) {
     yield put(
       Actions.addNotification(
-        genToastNotification("danger", "Error removing user")
+        genToastNotification("error", "Error removing user")
       )
     );
   }
@@ -54,7 +50,7 @@ export function* updateUser(action) {
   } catch (error) {
     yield put(
       Actions.addNotification(
-        genToastNotification("danger", "Error updating user")
+        genToastNotification("error", "Error updating user")
       )
     );
   }
@@ -74,7 +70,7 @@ export function* createUser(action) {
   } catch (error) {
     yield put(
       Actions.addNotification(
-        genToastNotification("danger", "Error creating user")
+        genToastNotification("error", "Error creating user")
       )
     );
   }

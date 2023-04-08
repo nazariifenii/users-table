@@ -16,6 +16,7 @@ import {
   TableEditRow,
 } from "./App.styled";
 import Toast from "./components/Toast/Toast";
+import { genToastNotification } from "./components/Toast/toastProperties";
 import { clearObjectValues } from "./utils";
 
 const UsersPage = () => {
@@ -37,7 +38,7 @@ const UsersPage = () => {
     dispatch(Actions.deleteUser({ id }));
   };
 
-  const onChangeInput = (e) => {
+  const onChangeEditInput = (e) => {
     const { name: fieldName, value } = e.target;
     dispatch(Actions.setEditUserRow(R.assoc([fieldName], value, editUserRow)));
   };
@@ -46,14 +47,28 @@ const UsersPage = () => {
     dispatch(Actions.setEditUserRow(usersByIds[id]));
   };
 
-  const handleSaveUserData = (id) => {
-    if (id === editUserRow?.id) {
+  const handleSaveUserData = () => {
+    if (editUserRow.name && editUserRow.age && editUserRow.about) {
       dispatch(Actions.updateUser(editUserRow));
+    } else {
+      dispatch(
+        Actions.addNotification(
+          genToastNotification("error", "All the fields should be filled")
+        )
+      );
     }
   };
 
   const handleCreateUser = () => {
-    dispatch(Actions.createUser(createUserRow));
+    if (createUserRow.name && createUserRow.age && createUserRow.about) {
+      dispatch(Actions.createUser(createUserRow));
+    } else {
+      dispatch(
+        Actions.addNotification(
+          genToastNotification("error", "All the fields should be filled")
+        )
+      );
+    }
   };
 
   const onChangeCreateInput = (e) => {
@@ -110,7 +125,7 @@ const UsersPage = () => {
                           name="name"
                           value={editUserRow?.name}
                           type="text"
-                          onChange={(e) => onChangeInput(e, id)}
+                          onChange={(e) => onChangeEditInput(e, id)}
                           placeholder="Type Name"
                         />
                       ) : (
@@ -125,7 +140,7 @@ const UsersPage = () => {
                           max="200"
                           value={editUserRow?.age}
                           type="number"
-                          onChange={(e) => onChangeInput(e, id)}
+                          onChange={(e) => onChangeEditInput(e, id)}
                           placeholder="Type age"
                         />
                       ) : (
@@ -138,7 +153,7 @@ const UsersPage = () => {
                           name="about"
                           value={editUserRow?.about}
                           type="text"
-                          onChange={(e) => onChangeInput(e, id)}
+                          onChange={(e) => onChangeEditInput(e, id)}
                           placeholder="Type info"
                         />
                       ) : (
@@ -150,7 +165,7 @@ const UsersPage = () => {
                         <>
                           <ButtonLeft
                             type="create"
-                            onClick={() => handleSaveUserData(id)}
+                            onClick={handleSaveUserData}
                           >
                             Save
                           </ButtonLeft>
