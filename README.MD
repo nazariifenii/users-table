@@ -1,4 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Users table
+
+## Live demo:
+    https://frolicking-maamoul-fd51e6.netlify.app
 
 ## Available Scripts
 
