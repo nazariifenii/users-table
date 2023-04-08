@@ -48,26 +48,38 @@ const UsersPage = () => {
   };
 
   const handleSaveUserData = () => {
-    if (editUserRow.name && editUserRow.age && editUserRow.about) {
-      dispatch(Actions.updateUser(editUserRow));
-    } else {
+    if (!editUserRow.name || !editUserRow.age || !editUserRow.about) {
       dispatch(
         Actions.addNotification(
           genToastNotification("error", "All the fields should be filled")
         )
       );
+    } else if (editUserRow.age <= 0) {
+      dispatch(
+        Actions.addNotification(
+          genToastNotification("error", "Age cannot be negative or zero")
+        )
+      );
+    } else {
+      dispatch(Actions.updateUser(editUserRow));
     }
   };
 
   const handleCreateUser = () => {
-    if (createUserRow.name && createUserRow.age && createUserRow.about) {
-      dispatch(Actions.createUser(createUserRow));
-    } else {
+    if (!createUserRow.name || !createUserRow.age || !createUserRow.about) {
       dispatch(
         Actions.addNotification(
           genToastNotification("error", "All the fields should be filled")
         )
       );
+    } else if (createUserRow.age <= 0) {
+      dispatch(
+        Actions.addNotification(
+          genToastNotification("error", "Age cannot be negative or zero")
+        )
+      );
+    } else {
+      dispatch(Actions.createUser(createUserRow));
     }
   };
 
