@@ -3,6 +3,7 @@ import Actions from "../actions";
 import Types from "../actions/types";
 import API from "../api/users";
 import { clearObjectValues, normalizeArrayOfEntities } from "../utils";
+import { genToastNotification } from "../components/Toast/toastProperties";
 
 export function* fetchUsersData() {
   try {
@@ -10,7 +11,11 @@ export function* fetchUsersData() {
     const normalizedData = yield call(normalizeArrayOfEntities, response);
     yield put(Actions.fetchUsersDataSuccess(normalizedData));
   } catch (error) {
-    console.log("FETCH_USERS_DATA_ERROR", error);
+    yield put(
+      Actions.addNotification(
+        genToastNotification("danger", "Error fetching all users")
+      )
+    );
   }
 }
 
@@ -21,9 +26,18 @@ export function* deleteUser(action) {
     if (response.id === id) {
       // && resp === success
       yield put(Actions.deleteUserSuccess({ id: response.id }));
+      yield put(
+        Actions.addNotification(
+          genToastNotification("success", "User deleted successfully")
+        )
+      );
     }
   } catch (error) {
-    console.log("DELETE_USER_ERROR", error);
+    yield put(
+      Actions.addNotification(
+        genToastNotification("danger", "Error removing user")
+      )
+    );
   }
 }
 
@@ -32,8 +46,17 @@ export function* updateUser(action) {
     const response = yield call(API.updateUser, action.data);
     yield put(Actions.updateUserSuccess(response));
     yield put(Actions.setEditUserRow({}));
+    yield put(
+      Actions.addNotification(
+        genToastNotification("success", "User updated successfully")
+      )
+    );
   } catch (error) {
-    console.log("UPDATE_USER_ERROR", error);
+    yield put(
+      Actions.addNotification(
+        genToastNotification("danger", "Error updating user")
+      )
+    );
   }
 }
 
@@ -43,8 +66,17 @@ export function* createUser(action) {
     yield put(Actions.createUserSuccess(response));
     const clearedValues = clearObjectValues(response);
     yield put(Actions.setCreateUserRow(clearedValues));
+    yield put(
+      Actions.addNotification(
+        genToastNotification("success", "User created successfully")
+      )
+    );
   } catch (error) {
-    console.log("UPDATE_USER_ERROR", error);
+    yield put(
+      Actions.addNotification(
+        genToastNotification("danger", "Error creating user")
+      )
+    );
   }
 }
 

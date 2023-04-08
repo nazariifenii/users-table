@@ -7,6 +7,7 @@ const initialState = {
   usersIds: [],
   editUserRow: {},
   createUserRow: {},
+  notificationList: [],
 };
 
 const users = (state = initialState, action) => {
@@ -44,6 +45,19 @@ const users = (state = initialState, action) => {
       return {
         ...state,
         createUserRow: action.data,
+      };
+    case Types.ADD_NOTIFICATION:
+      return {
+        ...state,
+        notificationList: [action.data, ...state.notificationList],
+      };
+    case Types.REMOVE_NOTIFICATION:
+      return {
+        ...state,
+        notificationList: R.filter(
+          (n) => n.id !== action.data,
+          state.notificationList
+        ),
       };
     default:
       return state;

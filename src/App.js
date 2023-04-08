@@ -15,18 +15,19 @@ import {
   TableRow,
   TableEditRow,
 } from "./App.styled";
+import Toast from "./components/Toast/Toast";
 import { clearObjectValues } from "./utils";
 
 const UsersPage = () => {
   const dispatch = useDispatch();
-  const [usersByIds, usersIds, editUserRow, createUserRow] = useSelector(
-    (state) => [
+  const [usersByIds, usersIds, editUserRow, createUserRow, notificationList] =
+    useSelector((state) => [
       state.users.usersByIds,
       state.users.usersIds,
       state.users.editUserRow,
       state.users.createUserRow,
-    ]
-  );
+      state.users.notificationList,
+    ]);
 
   useEffect(() => {
     dispatch(Actions.fetchUsersData());
@@ -70,8 +71,18 @@ const UsersPage = () => {
     dispatch(Actions.setEditUserRow({}));
   };
 
+  const deleteToast = (id) => {
+    dispatch(Actions.removeNotification(id));
+  };
+
   return (
     <Container>
+      <Toast
+        toastList={notificationList}
+        autoDelete={true}
+        autoDeleteTime={2000}
+        deleteToast={deleteToast}
+      />
       <Table>
         <thead>
           <TableRow>

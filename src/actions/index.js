@@ -51,6 +51,16 @@ const setCreateUserRow = (data) => ({
   data,
 });
 
+const addNotification = (data) => ({
+  type: types.ADD_NOTIFICATION,
+  data,
+});
+
+const removeNotification = (data) => ({
+  type: types.REMOVE_NOTIFICATION,
+  data,
+});
+
 const Actions = {
   fetchUsersData,
   fetchUsersDataSuccess,
@@ -62,6 +72,8 @@ const Actions = {
   createUserSuccess,
   setEditUserRow,
   setCreateUserRow,
+  addNotification,
+  removeNotification,
 };
 
 export default Actions;
