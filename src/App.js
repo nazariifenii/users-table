@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import * as R from "ramda";
 import { useSelector, useDispatch } from "react-redux";
 import Actions from "./actions";
 import {
@@ -18,11 +19,14 @@ import { clearObjectValues } from "./utils";
 
 const UsersPage = () => {
   const dispatch = useDispatch();
-  const [userData, editUserRow, createUserRow] = useSelector((state) => [
-    state.users.users,
-    state.users.editUserRow,
-    state.users.createUserRow,
-  ]);
+  const [usersByIds, usersIds, editUserRow, createUserRow] = useSelector(
+    (state) => [
+      state.users.usersByIds,
+      state.users.usersIds,
+      state.users.editUserRow,
+      state.users.createUserRow,
+    ]
+  );
 
   useEffect(() => {
     dispatch(Actions.fetchUsersData());
@@ -34,11 +38,11 @@ const UsersPage = () => {
 
   const onChangeInput = (e) => {
     const { name: fieldName, value } = e.target;
-    dispatch(Actions.setEditUserRow({ ...editUserRow, [fieldName]: value }));
+    dispatch(Actions.setEditUserRow(R.assoc([fieldName], value, editUserRow)));
   };
 
   const handleEditUser = (id) => {
-    dispatch(Actions.setEditUserRow(userData.find((user) => user.id === id)));
+    dispatch(Actions.setEditUserRow(usersByIds[id]));
   };
 
   const handleSaveUserData = (id) => {
@@ -54,7 +58,7 @@ const UsersPage = () => {
   const onChangeCreateInput = (e) => {
     const { name: fieldName, value } = e.target;
     dispatch(
-      Actions.setCreateUserRow({ ...createUserRow, [fieldName]: value })
+      Actions.setCreateUserRow(R.assoc([fieldName], value, createUserRow))
     );
   };
 
@@ -79,9 +83,10 @@ const UsersPage = () => {
           </TableRow>
         </thead>
         <tbody>
-          {userData.length === 0
+          {usersIds.length === 0
             ? null
-            : userData.map(({ id, name, age, about }) => {
+            : usersIds.map((id) => {
+                const { name, age, about } = usersByIds[id];
                 const isRowEditable = editUserRow?.id === id;
                 return (
                   <TableRow editable={isRowEditable} key={id}>
@@ -132,7 +137,10 @@ const UsersPage = () => {
                     <TableDataActionsCell>
                       {isRowEditable ? (
                         <>
-                          <ButtonLeft type="create" onClick={() => handleSaveUserData(id)}>
+                          <ButtonLeft
+                            type="create"
+                            onClick={() => handleSaveUserData(id)}
+                          >
                             Save
                           </ButtonLeft>
                           <Button onClick={handleCancelEdit}>Cancel</Button>
@@ -142,7 +150,10 @@ const UsersPage = () => {
                           <ButtonLeft onClick={() => handleEditUser(id)}>
                             Edit
                           </ButtonLeft>
-                          <Button type="error" onClick={() => handleDeleteUser(id)}>
+                          <Button
+                            type="error"
+                            onClick={() => handleDeleteUser(id)}
+                          >
                             Delete
                           </Button>
                         </>
@@ -183,7 +194,9 @@ const UsersPage = () => {
               />
             </TableDataCell>
             <TableDataActionsCell>
-              <ButtonLeft type="create" onClick={handleCreateUser}>Add New</ButtonLeft>
+              <ButtonLeft type="create" onClick={handleCreateUser}>
+                Add New
+              </ButtonLeft>
               <Button onClick={handleClearCreateUserRow}>Clear</Button>
             </TableDataActionsCell>
           </TableEditRow>

@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
+import * as R from "ramda";
 import Types from "../actions/types";
 
 const initialState = {
-  users: [],
+  usersByIds: [],
+  usersIds: [],
   editUserRow: {},
   createUserRow: {},
 };
@@ -10,23 +12,28 @@ const initialState = {
 const users = (state = initialState, action) => {
   switch (action.type) {
     case Types.FETCH_USERS_DATA_SUCCESS:
-      return { ...state, users: action.data };
-    case Types.DELETE_USER_SUCCESS:
       return {
         ...state,
-        users: state.users.filter((user) => user.id !== action.data.id),
+        usersByIds: action.data.entityById,
+        usersIds: action.data.ids,
+      };
+    case Types.DELETE_USER_SUCCESS:
+      const id = action.data.id;
+      return {
+        ...state,
+        usersByIds: R.dissoc(id, state.usersByIds),
+        usersIds: R.without([id], state.usersIds),
       };
     case Types.UPDATE_USER_SUCCESS:
       return {
         ...state,
-        users: state.users.map((user) =>
-          user.id === action.data.id ? action.data : user
-        ),
+        usersByIds: R.assoc(action.data.id, action.data, state.usersByIds),
       };
     case Types.CREATE_USER_SUCCESS:
       return {
         ...state,
-        users: [...state.users, action.data],
+        usersByIds: R.assoc(action.data.id, action.data, state.usersByIds),
+        usersIds: [...state.usersIds, action.data.id],
       };
     case Types.SET_EDIT_ROW:
       return {

@@ -2,12 +2,13 @@ import { all, call, put, takeEvery } from "redux-saga/effects";
 import Actions from "../actions";
 import Types from "../actions/types";
 import API from "../api/users";
-import { clearObjectValues } from "../utils";
+import { clearObjectValues, normalizeArrayOfEntities } from "../utils";
 
 export function* fetchUsersData() {
   try {
     const response = yield call(API.getAllUsers);
-    yield put(Actions.fetchUsersDataSuccess(response));
+    const normalizedData = yield call(normalizeArrayOfEntities, response);
+    yield put(Actions.fetchUsersDataSuccess(normalizedData));
   } catch (error) {
     console.log("FETCH_USERS_DATA_ERROR", error);
   }
